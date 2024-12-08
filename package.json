@@ -1,0 +1,103 @@
+{
+  "name": "@sotatech/node-fixjs",
+  "version": "0.0.3",
+  "description": "FIX Protocol Parser for Node.js",
+  "files": [
+    "./build/",
+    "./types/",
+    "./examples/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sotaaaaa/node-fixparser.git"
+  },
+  "scripts": {
+    "check": "npx @biomejs/biome check --fix .",
+    "lint": "npx @biomejs/biome lint --fix .",
+    "format": "npx @biomejs/biome format --write .",
+    "build": "npm run clean && npm run types && npm run build:main",
+    "build:main": "node -r ./esbuild-hook ./scripts/build",
+    "clean": "node -r ./esbuild-hook ./scripts/clean",
+    "test": "jest --ci --colors --detectOpenHandles",
+    "example:parse_message": "tsx examples/run-example.ts example_parse_message.ts",
+    "example:tcp_client": "tsx examples/run-example.ts example_tcp_client.ts",
+    "example:tcp_server": "tsx examples/run-example.ts example_tcp_server.ts",
+    "example:ws_client": "tsx examples/run-example.ts example_ws_client.ts",
+    "example:ws_server": "tsx examples/run-example.ts example_ws_server.ts",
+    "example:tlstcp_client": "tsx examples/run-example.ts example_tlstcp_client.ts",
+    "example:quickfix_client1": "tsx examples/run-example.ts example_quickfix_client1.ts",
+    "example:quickfix_executor": "tsx examples/run-example.ts example_quickfix_executor.ts",
+    "example:quickfix_dual": "tsx examples/run-example.ts example_quickfix_dual.ts",
+    "perf": "node --prof perf/Perf-FIXParser.js && node --prof-process isolate-*.log | cat",
+    "type:check": "tsc --noEmit",
+    "types": "tsc --declaration --emitDeclarationOnly --stripInternal --declarationDir ./types",
+    "upgrade-interactive": "ncu -u -t latest"
+  },
+  "dependencies": {
+    "proxy-agent": "6.4.0",
+    "uuid": "11.0.3",
+    "ws": "8.18.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@swc/core": "1.9.3",
+    "@swc/jest": "0.2.37",
+    "@types/jest": "29.5.14",
+    "@types/node": "22.10.1",
+    "@types/uuid": "10.0.0",
+    "@types/ws": "8.5.13",
+    "cli-table": "0.3.11",
+    "dotenv": "16.4.7",
+    "esbuild": "0.24.0",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "jest-junit": "16.0.0",
+    "mockdate": "3.0.5",
+    "npm-check-updates": "17.1.11",
+    "process": "0.11.10",
+    "source-map-support": "0.5.21",
+    "text-encoding-utf-8": "1.0.2",
+    "ts-node": "10.9.2",
+    "tsx": "4.19.2",
+    "typescript": "5.7.2"
+  },
+  "keywords": [
+    "node-fixjs",
+    "fix-protocol",
+    "message-parsing",
+    "protocol-parser",
+    "fix-parser",
+    "quickfix",
+    "fix-engine",
+    "fix-client",
+    "fix-server",
+    "fix-acceptor",
+    "fix-initiator",
+    "fix-transport"
+  ],
+  "author": "SOTA",
+  "license": "LICENSE.md",
+  "types": "./types/FIXParser.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/FIXParser.d.ts",
+      "import": "./build/esm/FIXParser.mjs",
+      "require": "./build/cjs/FIXParser.js"
+    },
+    "./FIXParser": {
+      "types": "./types/FIXParser.d.ts",
+      "import": "./build/esm/FIXParser.mjs",
+      "require": "./build/cjs/FIXParser.js"
+    },
+    "./FIXParserBrowser": {
+      "types": "./types/FIXParserBrowser.d.ts",
+      "import": "./build/esm/FIXParserBrowser.mjs",
+      "require": "./build/cjs/FIXParserBrowser.js"
+    },
+    "./FIXServer": {
+      "types": "./types/FIXServer.d.ts",
+      "import": "./build/esm/FIXServer.mjs",
+      "require": "./build/cjs/FIXServer.js"
+    }
+  }
+}

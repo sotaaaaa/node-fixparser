@@ -1,0 +1,58 @@
+import { Field } from "../fields/Field";
+import type { Structure } from "../messagetype/MessageType";
+import type { RefType } from "../messagetype/MessageType";
+import type { ISpecEnums } from "../spec/SpecEnums";
+import type { ISpecFields } from "../spec/SpecFields";
+type FieldValues = {
+    [tag: string]: any;
+};
+export type MessageError = {
+    field: RefType | ISpecFields | undefined;
+    name: string | null;
+    tag: number;
+    value: number | string | boolean | null;
+    expectedValue?: number | string | boolean | null;
+    error: string;
+};
+export declare class Message {
+    #private;
+    fixVersion: string;
+    data: Field[];
+    messageString: string;
+    description: string;
+    messageType: string;
+    messageTypeDescription: string;
+    messageSequence: number;
+    structure: Structure[] | null;
+    bodyLengthValid: boolean;
+    checksumValid: boolean;
+    checksumValue: string | null;
+    checksumExpected: string | null;
+    bodyLengthValue: number | null;
+    bodyLengthExpected: number | null;
+    constructor(fixVersion?: string, ...fields: Field[]);
+    addField(field: Field): void;
+    addFields(...fields: Field[]): void;
+    removeFieldByTag(tag: number): void;
+    getField(tag: number): Field | undefined;
+    getFields(tag: number): Field[] | undefined;
+    getFieldValues(): FieldValues;
+    getFieldNameValues(): FieldValues;
+    getFieldExplains(): FieldValues;
+    setField(field: Field): void;
+    setString(fixString: string): void;
+    setDescription(description: string): void;
+    setMessageType(messageType: string): void;
+    setMessageTypeDescription(messageTypeDescription: string): void;
+    setMessageSequence(messageSequence: number): void;
+    setStructure(structure: Structure[]): void;
+    getEnum(tag: number, value: number | string | boolean | null): ISpecEnums | undefined;
+    getBriefDescription(): string | null;
+    validateBodyLength(value: string): boolean;
+    validateChecksum(value: string): boolean;
+    validate(requiredFieldsOnly?: boolean): MessageError[];
+    encode(separator?: string): string;
+    clone(): Message;
+    private reset;
+}
+export {};
