@@ -55,6 +55,9 @@ export interface IFIXParser {
   requestedLogout?: boolean;
   /* Logger instance */
   logger: Logger;
+  // Custom logon fields
+  // Example: Add fields required for logon (username, password, etc.)
+  requiredLogonFields?: number[]
 
   /**
    * Connect to a remote FIX server/gateway.

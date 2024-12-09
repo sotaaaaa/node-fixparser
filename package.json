@@ -1,11 +1,10 @@
 {
   "name": "@sotatech/node-fixjs",
-  "version": "0.0.3",
+  "version": "0.0.11",
   "description": "FIX Protocol Parser for Node.js",
   "files": [
     "./build/",
-    "./types/",
-    "./examples/"
+    "./types/"
   ],
   "repository": {
     "type": "git",
@@ -77,22 +76,14 @@
   ],
   "author": "SOTA",
   "license": "LICENSE.md",
+  "main": "./build/cjs/FIXParser.js",
+  "module": "./build/esm/FIXParser.mjs",
   "types": "./types/FIXParser.d.ts",
   "exports": {
     ".": {
       "types": "./types/FIXParser.d.ts",
       "import": "./build/esm/FIXParser.mjs",
       "require": "./build/cjs/FIXParser.js"
-    },
-    "./FIXParser": {
-      "types": "./types/FIXParser.d.ts",
-      "import": "./build/esm/FIXParser.mjs",
-      "require": "./build/cjs/FIXParser.js"
-    },
-    "./FIXParserBrowser": {
-      "types": "./types/FIXParserBrowser.d.ts",
-      "import": "./build/esm/FIXParserBrowser.mjs",
-      "require": "./build/cjs/FIXParserBrowser.js"
     },
     "./FIXServer": {
       "types": "./types/FIXServer.d.ts",

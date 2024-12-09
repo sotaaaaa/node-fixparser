@@ -1,12 +1,12 @@
-import { type ConnectionType, FIXParserBase, type Options as FIXParserOptions, type Protocol } from "./FIXParserBase";
-import type { IFIXParser } from "./IFIXParser";
-import { Field } from "./fields/Field";
-import * as Constants from "./fieldtypes";
-import { Message } from "./message/Message";
-import { Logger } from "./util/Logger";
-import { MessageBuffer } from "./util/MessageBuffer";
-import { type Parser, type Version } from "./util/util";
-export type Options = Pick<FIXParserOptions, "host" | "port" | "sender" | "target" | "heartbeatIntervalSeconds" | "fixVersion" | "logging" | "logOptions" | "onMessage" | "onOpen" | "onError" | "onClose" | "onReady">;
+import { type ConnectionType, FIXParserBase, type Options as FIXParserOptions, type Protocol } from './FIXParserBase';
+import type { IFIXParser } from './IFIXParser';
+import { Field } from './fields/Field';
+import * as Constants from './fieldtypes';
+import { Message } from './message/Message';
+import { Logger } from './util/Logger';
+import { MessageBuffer } from './util/MessageBuffer';
+import { type Parser, type Version } from './util/util';
+export type Options = Pick<FIXParserOptions, 'host' | 'port' | 'sender' | 'target' | 'heartbeatIntervalSeconds' | 'fixVersion' | 'logging' | 'logOptions' | 'onMessage' | 'onOpen' | 'onError' | 'onClose' | 'onReady'>;
 declare class FIXParserBrowser implements IFIXParser {
     static version: Version;
     parserName: Parser;
@@ -130,9 +130,9 @@ declare class FIXParserBrowser implements IFIXParser {
      */
     startHeartbeat(heartBeatInterval?: number, disableLog?: boolean): void;
 }
-export * from "./fieldtypes";
-export type { Protocol } from "./FIXParserBase";
-export type { MessageError } from "./message/Message";
+export * from './fieldtypes';
+export type { Protocol } from './FIXParserBase';
+export type { MessageError } from './message/Message';
 export { Constants };
 export { Field };
 export { Message };

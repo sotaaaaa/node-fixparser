@@ -35,8 +35,11 @@ export const handleLogon = (
   const fixVersion: string | null = String(
     message.getField(FieldType.BeginString)?.value
   );
+
   let validSender = true;
   let validTarget = true;
+  let validFields = true;
+  let errorMessage = 'Invalid Logon TARGET or SENDER.';
 
   if (fixVersion) {
     parser.logger.log({
@@ -55,7 +58,9 @@ export const handleLogon = (
   const sender: string | null = message.getField(FieldType.SenderCompID)
     ? message.getField(FieldType.SenderCompID)!.value!.toString()
     : parser.target;
-  if (target && target !== parser.sender) {
+
+  // Support for wildcard target
+  if (target && target != '*' && target != parser.sender) {
     parser.logger.logWarning({
       message: `FIXServer (${parser.protocol!.toUpperCase()}): -- Expected TargetCompID=${
         parser.sender
@@ -63,7 +68,9 @@ export const handleLogon = (
     });
     validTarget = false;
   }
-  if (sender && sender !== parser.target) {
+
+  // Support for wildcard sender
+  if (sender && sender != '*' && sender != parser.target) {
     parser.logger.logWarning({
       message: `FIXServer (${parser.protocol?.toUpperCase()}): -- Expected SenderCompID=${
         parser.target
@@ -72,7 +79,25 @@ export const handleLogon = (
     validSender = false;
   }
 
-  if (validSender && validTarget) {
+  // Check parser customLogonFields for custom logon fields
+  const requiredLogonFields = parser?.requiredLogonFields || [];
+  const isRequiredLogonFieldsLogonFields = requiredLogonFields.length > 0;
+
+  // If required logon fields are set, check if they are present in the logon message
+  if (isRequiredLogonFieldsLogonFields) {
+    for (const field of requiredLogonFields) {
+      if (!message.getField(field)) {
+        parser.logger.logWarning({
+          message: `FIXServer (${parser.protocol?.toUpperCase()}): -- Missing required field ${field}`,
+        });
+        validFields = false;
+        errorMessage = `Missing required field ${field}`;
+      }
+    }
+  }
+
+  // If all checks pass, send a logon acknowledge
+  if (validSender && validTarget && validFields) {
     if (parser.connectionType === 'acceptor') {
       parser.nextNumIn = 1;
       parser.setNextTargetMsgSeqNum(1);
@@ -114,7 +139,9 @@ export const handleLogon = (
     parser.isLoggedIn = true;
     parser.logger.log({
       level: 'info',
-      message: `FIXServer (${parser.protocol?.toUpperCase()}): >> Logon successful by ${parser.connectionType}`,
+      message: `FIXServer (${parser.protocol?.toUpperCase()}): >> Logon successful by ${
+        parser.connectionType
+      }`,
     });
     const heartBeatInterval: number = message.getField(FieldType.HeartBtInt)
       ? Number(message.getField(FieldType.HeartBtInt)?.value!)
@@ -126,19 +153,23 @@ export const handleLogon = (
     parser.startHeartbeat(heartBeatInterval);
     return true;
   }
+
+  // When the sender or target is invalid, send a logon reject
   const logonReject: Message = parser.createMessage(
     new Field(FieldType.MsgType, MessageType.Logout),
     new Field(FieldType.MsgSeqNum, parser.getNextTargetMsgSeqNum()),
     new Field(FieldType.SenderCompID, validSender ? sender : 'INVALID_SENDER'),
     new Field(FieldType.SendingTime, parser.getTimestamp(new Date())),
     new Field(FieldType.TargetCompID, validTarget ? target : 'INVALID_TARGET'),
-    new Field(FieldType.Text, 'Invalid Logon TARGET or SENDER.')
+    new Field(FieldType.Text, errorMessage)
   );
+
   parser.isLoggedIn = false;
   parser.send(logonReject);
   parser.logger.logWarning({
     message: `FIXServer (${parser.protocol?.toUpperCase()}): >> sent Logout due to invalid Logon`,
   });
+
   parser.stopHeartbeat();
   parser.close();
   return false;

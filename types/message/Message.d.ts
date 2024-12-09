@@ -1,8 +1,8 @@
-import { Field } from "../fields/Field";
-import type { Structure } from "../messagetype/MessageType";
-import type { RefType } from "../messagetype/MessageType";
-import type { ISpecEnums } from "../spec/SpecEnums";
-import type { ISpecFields } from "../spec/SpecFields";
+import { Field } from '../fields/Field';
+import type { Structure } from '../messagetype/MessageType';
+import type { RefType } from '../messagetype/MessageType';
+import type { ISpecEnums } from '../spec/SpecEnums';
+import type { ISpecFields } from '../spec/SpecFields';
 type FieldValues = {
     [tag: string]: any;
 };

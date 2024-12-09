@@ -90,6 +90,10 @@ class FIXServer implements IFIXParser {
   /* Message counter */
   public messageCounter = 0;
 
+  // Required logon fields
+  // Example: Add fields required for logon (username, password, etc.)
+  public requiredLogonFields: number[] = [];
+
   /**
    * onMessageCallback is called when a message has been received
    *
